@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Stock Sector Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white p-6">
+    <div class="max-w-6xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="text-4xl font-bold text-green-400 mb-2">Market Sector Explorer</h1>
+            <p class="text-gray-400">NYSE, S&P 500, KOSPI, KOSDAQ • Updated Daily</p>
+        </header>
+
+        <!-- Market & Search Controls -->
+        <div class="flex flex-col md:flex-row gap-4 mb-8">
+            <input type="text" id="searchInput" placeholder="Search symbol or name..." 
+                class="bg-gray-800 border border-gray-700 p-3 rounded-lg flex-grow focus:outline-none focus:ring-2 focus:ring-green-500">
+            <select id="marketFilter" class="bg-gray-800 border border-gray-700 p-3 rounded-lg">
+                <option value="ALL">All Markets</option>
+                <option value="KOSPI">KOSPI</option>
+                <option value="KOSDAQ">KOSDAQ</option>
+                <option value="S&P500">S&P 500</option>
+                <option value="NYSE">NYSE</option>
+            </select>
+        </div>
+
+        <!-- Sector Buttons -->
+        <div id="sectorContainer" class="flex flex-wrap gap-2 mb-10">
+            <button onclick="filterBySector('ALL')" class="bg-green-600 px-4 py-2 rounded-full hover:bg-green-500 transition">All Sectors</button>
+            <!-- Sectors will be generated here -->
+        </div>
+
+        <!-- Stock Table -->
+        <div class="bg-gray-800 rounded-xl overflow-hidden border border-gray-700">
+            <table class="w-full text-left">
+                <thead class="bg-gray-700 text-gray-300">
+                    <tr>
+                        <th class="p-4">Symbol</th>
+                        <th class="p-4">Name</th>
+                        <th class="p-4">Sector</th>
+                        <th class="p-4">Market</th>
+                    </tr>
+                </thead>
+                <tbody id="stockTable" class="divide-y divide-gray-700">
+                    <!-- Stocks will appear here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let allStocks = [];
+        let currentSector = 'ALL';
+
+        // Load the data from your JSON file
+        async function loadData() {
+            const response = await fetch('stocks.json');
+            allStocks = await response.json();
+            
+            generateSectorButtons();
+            renderTable();
+        }
+
+        function generateSectorButtons() {
+            const sectors = [...new Set(allStocks.map(s => s.sector))].sort();
+            const container = document.getElementById('sectorContainer');
+            sectors.forEach(sector => {
+                if(sector === 'Other' || sector === 'Unknown') return;
+                const btn = document.createElement('button');
+                btn.className = "bg-gray-700 px-4 py-2 rounded-full hover:bg-gray-600 transition text-sm";
+                btn.innerText = sector;
+                btn.onclick = () => filterBySector(sector);
+                container.appendChild(btn);
+            });
+        }
+
+        function filterBySector(sector) {
+            currentSector = sector;
+            renderTable();
+        }
+
+        function renderTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const marketTerm = document.getElementById('marketFilter').value;
+            const table = document.getElementById('stockTable');
+            table.innerHTML = '';
+
+            const filtered = allStocks.filter(s => {
+                const matchesSector = currentSector === 'ALL' || s.sector === currentSector;
+                const matchesSearch = s.name.toLowerCase().includes(searchTerm) || s.symbol.toLowerCase().includes(searchTerm);
+                const matchesMarket = marketTerm === 'ALL' || s.market === marketTerm;
+                return matchesSector && matchesSearch && matchesMarket;
+            });
+
+            // Only show first 100 for performance, more load as you search
+            filtered.slice(0, 100).forEach(s => {
+                const row = `<tr>
+                    <td class="p-4 font-mono text-green-400">${s.symbol}</td>
+                    <td class="p-4 font-medium">${s.name}</td>
+                    <td class="p-4 text-gray-400">${s.sector}</td>
+                    <td class="p-4"><span class="bg-gray-900 px-2 py-1 rounded text-xs">${s.market}</span></td>
+                </tr>`;
+                table.innerHTML += row;
+            });
+        }
+
+        document.getElementById('searchInput').addEventListener('input', renderTable);
+        document.getElementById('marketFilter').addEventListener('change', renderTable);
+        loadData();
+    </script>
+</body>
+</html>
