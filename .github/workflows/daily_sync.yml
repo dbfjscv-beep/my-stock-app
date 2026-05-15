@@ -1,0 +1,33 @@
+name: Daily Stock Sync
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every day at midnight
+  workflow_dispatch: # Allows you to run it manually with one click
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: |
+          pip install pandas finance-datareader lxml
+
+      - name: Run Collector
+        run: python collector.py
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "StockBot"
+          git config --global user.value "bot@example.com"
+          git add stocks.json
+          git commit -m "Update stock data" || exit 0
+          git push
