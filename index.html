@@ -1,24 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Stock Sector Dashboard</title>
+    <title>글로벌 주식 섹터 대시보드</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-900 text-white p-6">
+<body class="bg-gray-900 text-white p-6 font-sans">
     <div class="max-w-6xl mx-auto">
         <header class="mb-10 text-center">
-            <h1 class="text-4xl font-bold text-green-400 mb-2">Market Sector Explorer</h1>
-            <p class="text-gray-400">NYSE, S&P 500, KOSPI, KOSDAQ • Updated Daily</p>
+            <h1 class="text-4xl font-bold text-green-400 mb-2">글로벌 섹터별 주식 탐색기</h1>
+            <p class="text-gray-400">NYSE, S&P 500, KOSPI, KOSDAQ • 매일 자동 업데이트</p>
         </header>
 
-        <!-- Market & Search Controls -->
+        <!-- 검색 및 필터 -->
         <div class="flex flex-col md:flex-row gap-4 mb-8">
-            <input type="text" id="searchInput" placeholder="Search symbol or name..." 
-                class="bg-gray-800 border border-gray-700 p-3 rounded-lg flex-grow focus:outline-none focus:ring-2 focus:ring-green-500">
-            <select id="marketFilter" class="bg-gray-800 border border-gray-700 p-3 rounded-lg">
-                <option value="ALL">All Markets</option>
+            <input type="text" id="searchInput" placeholder="종목명 또는 티커 검색 (예: 삼성, AAPL)..." 
+                class="bg-gray-800 border border-gray-700 p-3 rounded-lg flex-grow focus:outline-none focus:ring-2 focus:ring-green-500 text-white">
+            <select id="marketFilter" class="bg-gray-800 border border-gray-700 p-3 rounded-lg text-white">
+                <option value="ALL">모든 시장</option>
                 <option value="KOSPI">KOSPI</option>
                 <option value="KOSDAQ">KOSDAQ</option>
                 <option value="S&P500">S&P 500</option>
@@ -26,26 +26,26 @@
             </select>
         </div>
 
-        <!-- Sector Buttons -->
-        <div id="sectorContainer" class="flex flex-wrap gap-2 mb-10">
-            <button onclick="filterBySector('ALL')" class="bg-green-600 px-4 py-2 rounded-full hover:bg-green-500 transition">All Sectors</button>
-            <!-- Sectors will be generated here -->
+        <!-- 섹터 버튼 -->
+        <div id="sectorContainer" class="flex flex-wrap gap-2 mb-6">
+            <button onclick="filterBySector('ALL')" class="bg-green-600 px-4 py-2 rounded-full hover:bg-green-500 transition text-sm font-bold">전체 섹터</button>
         </div>
 
-        <!-- Stock Table -->
+        <!-- 데이터 카운터 -->
+        <p id="countDisplay" class="text-gray-400 text-sm mb-2 text-right font-mono">데이터를 로드하는 중...</p>
+
+        <!-- 주식 테이블 -->
         <div class="bg-gray-800 rounded-xl overflow-hidden border border-gray-700">
             <table class="w-full text-left">
                 <thead class="bg-gray-700 text-gray-300">
                     <tr>
-                        <th class="p-4">Symbol</th>
-                        <th class="p-4">Name</th>
-                        <th class="p-4">Sector</th>
-                        <th class="p-4">Market</th>
+                        <th class="p-4">티커</th>
+                        <th class="p-4">종목명</th>
+                        <th class="p-4">섹터</th>
+                        <th class="p-4">시장</th>
                     </tr>
                 </thead>
-                <tbody id="stockTable" class="divide-y divide-gray-700">
-                    <!-- Stocks will appear here -->
-                </tbody>
+                <tbody id="stockTable" class="divide-y divide-gray-700"></tbody>
             </table>
         </div>
     </div>
@@ -54,22 +54,25 @@
         let allStocks = [];
         let currentSector = 'ALL';
 
-        // Load the data from your JSON file
         async function loadData() {
-            const response = await fetch('stocks.json');
-            allStocks = await response.json();
-            
-            generateSectorButtons();
-            renderTable();
+            try {
+                // 뒤에 타임스탬프를 붙여 브라우저가 옛날 데이터를 보여주는 현상을 방지합니다.
+                const response = await fetch('stocks.json?t=' + new Date().getTime());
+                allStocks = await response.json();
+                generateSectorButtons();
+                renderTable();
+            } catch (e) {
+                document.getElementById('countDisplay').innerText = "데이터 로드 오류!";
+            }
         }
 
         function generateSectorButtons() {
             const sectors = [...new Set(allStocks.map(s => s.sector))].sort();
             const container = document.getElementById('sectorContainer');
             sectors.forEach(sector => {
-                if(sector === 'Other' || sector === 'Unknown') return;
+                if(!sector || sector === '기타' || sector === '분류안됨') return;
                 const btn = document.createElement('button');
-                btn.className = "bg-gray-700 px-4 py-2 rounded-full hover:bg-gray-600 transition text-sm";
+                btn.className = "bg-gray-700 px-4 py-2 rounded-full hover:bg-gray-600 transition text-xs";
                 btn.innerText = sector;
                 btn.onclick = () => filterBySector(sector);
                 container.appendChild(btn);
@@ -94,12 +97,16 @@
                 return matchesSector && matchesSearch && matchesMarket;
             });
 
-            // Only show first 100 for performance, more load as you search
-            filtered.slice(0, 100).forEach(s => {
-                const row = `<tr>
+            // 화면 상태를 설명하는 카운터 업데이트
+            const limit = 100;
+            document.getElementById('countDisplay').innerText = 
+                `검색 결과: ${filtered.length.toLocaleString()}개 / 로딩된 전체 데이터: ${allStocks.length.toLocaleString()}개 (상위 ${Math.min(filtered.length, limit)}개 표시)`;
+
+            filtered.slice(0, limit).forEach(s => {
+                const row = `<tr class="hover:bg-gray-750 transition">
                     <td class="p-4 font-mono text-green-400">${s.symbol}</td>
                     <td class="p-4 font-medium">${s.name}</td>
-                    <td class="p-4 text-gray-400">${s.sector}</td>
+                    <td class="p-4 text-gray-400 text-xs">${s.sector}</td>
                     <td class="p-4"><span class="bg-gray-900 px-2 py-1 rounded text-xs">${s.market}</span></td>
                 </tr>`;
                 table.innerHTML += row;
