@@ -2,20 +2,26 @@ name: Daily Stock Sync
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Runs every day at midnight
-  workflow_dispatch: # Allows you to run it manually with one click
+    - cron: '0 0 * * *' 
+  workflow_dispatch: 
+
+# We are giving the worker permission to save the file
+permissions:
+  contents: write 
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        # Upgraded to v4 to fix the Node.js warning
+        uses: actions/checkout@v4 
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        # Upgraded to v5 to fix the Node.js warning
+        uses: actions/setup-python@v5 
         with:
-          python-version: '3.9'
+          python-version: '3.10'
 
       - name: Install Dependencies
         run: |
@@ -27,7 +33,7 @@ jobs:
       - name: Commit and Push
         run: |
           git config --global user.name "StockBot"
-          git config --global user.value "bot@example.com"
+          git config --global user.email "bot@example.com"
           git add stocks.json
           git commit -m "Update stock data" || exit 0
           git push
