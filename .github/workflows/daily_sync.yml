@@ -5,7 +5,6 @@ on:
     - cron: '0 0 * * *' 
   workflow_dispatch: 
 
-# We are giving the worker permission to save the file
 permissions:
   contents: write 
 
@@ -14,18 +13,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        # Upgraded to v4 to fix the Node.js warning
-        uses: actions/checkout@v4 
+        uses: actions/checkout@v6
 
       - name: Set up Python
-        # Upgraded to v5 to fix the Node.js warning
-        uses: actions/setup-python@v5 
+        uses: actions/setup-python@v6
         with:
           python-version: '3.10'
 
       - name: Install Dependencies
         run: |
-          pip install pandas finance-datareader lxml
+          pip install pandas finance-datareader lxml beautifulsoup4 requests html5lib
 
       - name: Run Collector
         run: python collector.py
@@ -35,5 +32,5 @@ jobs:
           git config --global user.name "StockBot"
           git config --global user.email "bot@example.com"
           git add stocks.json
-          git commit -m "Update stock data" || exit 0
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update stock data"
           git push
