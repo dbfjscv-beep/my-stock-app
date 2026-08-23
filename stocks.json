@@ -36348,18 +36348,6 @@
         "market": "NYSE"
     },
     {
-        "symbol": "AFGB",
-        "name": "American Financial Group 5 875 Subordinated Debentures Exp 2059",
-        "sector": "미국 기타(NYSE)",
-        "market": "NYSE"
-    },
-    {
-        "symbol": "AFGD",
-        "name": "American Financial Group 5 625 Subordinated Debenture",
-        "sector": "미국 기타(NYSE)",
-        "market": "NYSE"
-    },
-    {
         "symbol": "AEFC",
         "name": "Aegon Funding Company 5 10 Subordinated Notes due 2049",
         "sector": "미국 기타(NYSE)",
@@ -36372,14 +36360,26 @@
         "market": "NYSE"
     },
     {
-        "symbol": "CCZ",
-        "name": "Comcast Holdings ZONES 2 Exchangeable Subor Debentures Exp 15 Nov 2029",
+        "symbol": "AFGB",
+        "name": "American Financial Group 5 875 Subordinated Debentures Exp 2059",
+        "sector": "미국 기타(NYSE)",
+        "market": "NYSE"
+    },
+    {
+        "symbol": "AFGD",
+        "name": "American Financial Group 5 625 Subordinated Debenture",
         "sector": "미국 기타(NYSE)",
         "market": "NYSE"
     },
     {
         "symbol": "CELG RT",
         "name": "Bristol Myers Squibb Company Contingent Rights Exp 31 Dec 2030",
+        "sector": "미국 기타(NYSE)",
+        "market": "NYSE"
+    },
+    {
+        "symbol": "CCZ",
+        "name": "Comcast Holdings ZONES 2 Exchangeable Subor Debentures Exp 15 Nov 2029",
         "sector": "미국 기타(NYSE)",
         "market": "NYSE"
     },
@@ -36396,18 +36396,6 @@
         "market": "NYSE"
     },
     {
-        "symbol": "GJO",
-        "name": "STRATS SM Wal-Mart 4.65 Floating Rate STRATS Certificates Series 2005-4",
-        "sector": "미국 기타(NYSE)",
-        "market": "NYSE"
-    },
-    {
-        "symbol": "GJS",
-        "name": "Strats Sm Trust For Goldman Sachs Group Securities Certificates Series 2006-2",
-        "sector": "미국 기타(NYSE)",
-        "market": "NYSE"
-    },
-    {
         "symbol": "GJR",
         "name": "STRATS SM Floating Rate Structured Repackaged Asset Backed Gamble Securities",
         "sector": "미국 기타(NYSE)",
@@ -36420,20 +36408,14 @@
         "market": "NYSE"
     },
     {
-        "symbol": "EMP",
-        "name": "Entergy Mississippi 4.90 First Mortgage Bonds Exp 1 Oct 2066",
+        "symbol": "GJO",
+        "name": "STRATS SM Wal-Mart 4.65 Floating Rate STRATS Certificates Series 2005-4",
         "sector": "미국 기타(NYSE)",
         "market": "NYSE"
     },
     {
-        "symbol": "DUKB",
-        "name": "Duke Energy Corporation 5.625% Junior Subordinated Debentures Exp 15 Sep 2078",
-        "sector": "미국 기타(NYSE)",
-        "market": "NYSE"
-    },
-    {
-        "symbol": "EAI",
-        "name": "Entergy Arkansas First Mortgage Bonds 4.875 Series Exp 01 Sept 2066",
+        "symbol": "GJS",
+        "name": "Strats Sm Trust For Goldman Sachs Group Securities Certificates Series 2006-2",
         "sector": "미국 기타(NYSE)",
         "market": "NYSE"
     },
@@ -36444,14 +36426,32 @@
         "market": "NYSE"
     },
     {
-        "symbol": "ENJ",
-        "name": "Entergy Orleans 5% Mortgage Bonds Series Exp 01 Dec 2052",
+        "symbol": "DUKB",
+        "name": "Duke Energy Corporation 5.625% Junior Subordinated Debentures Exp 15 Sep 2078",
         "sector": "미국 기타(NYSE)",
         "market": "NYSE"
     },
     {
         "symbol": "ELC",
         "name": "Entergy Louisiana Collateral Mortgage Bonds 4.875 Series Exp 01 Sept 2066",
+        "sector": "미국 기타(NYSE)",
+        "market": "NYSE"
+    },
+    {
+        "symbol": "EAI",
+        "name": "Entergy Arkansas First Mortgage Bonds 4.875 Series Exp 01 Sept 2066",
+        "sector": "미국 기타(NYSE)",
+        "market": "NYSE"
+    },
+    {
+        "symbol": "ENJ",
+        "name": "Entergy Orleans 5% Mortgage Bonds Series Exp 01 Dec 2052",
+        "sector": "미국 기타(NYSE)",
+        "market": "NYSE"
+    },
+    {
+        "symbol": "EMP",
+        "name": "Entergy Mississippi 4.90 First Mortgage Bonds Exp 1 Oct 2066",
         "sector": "미국 기타(NYSE)",
         "market": "NYSE"
     },
@@ -36480,14 +36480,14 @@
         "market": "NYSE"
     },
     {
-        "symbol": "AFGE",
-        "name": "American Financial Group 4 500 Subordinated Debentures due 2060",
+        "symbol": "DTB",
+        "name": "DTE Energy 4 375 Junior Subordinated Debentures Series G due 2080",
         "sector": "미국 기타(NYSE)",
         "market": "NYSE"
     },
     {
-        "symbol": "DTB",
-        "name": "DTE Energy 4 375 Junior Subordinated Debentures Series G due 2080",
+        "symbol": "AFGE",
+        "name": "American Financial Group 4 500 Subordinated Debentures due 2060",
         "sector": "미국 기타(NYSE)",
         "market": "NYSE"
     },
